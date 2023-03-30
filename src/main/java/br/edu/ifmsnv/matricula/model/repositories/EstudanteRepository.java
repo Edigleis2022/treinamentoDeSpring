@@ -12,4 +12,10 @@ import br.edu.ifmsnv.matricula.model.entities.Estudante;
 @Repository
 public interface EstudanteRepository extends JpaRepository<Estudante, UUID>{
 
+	Boolean existByEmail(String email);
+	Boolean existByCpf(String cpf);
+	
+	/*Desvantagem não sabe se a consulta retornada é cpf ou email*/
+	Boolean existByCpfOrEmail(String cpf, String email);
+	
 }

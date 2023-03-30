@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
@@ -41,7 +42,7 @@ public class EstudanteController {
 			@ApiResponse(responseCode = "200", description = "Operação de sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EstudanteResponse.class))),
 			@ApiResponse(responseCode = "500", description = "Falha no serviço", content = @Content) })
 	@PostMapping
-	public ResponseEntity<EstudanteResponse> create(@RequestBody EstudanteRequest estudanteRequest) {
+	public ResponseEntity<EstudanteResponse> create(@RequestBody @Valid EstudanteRequest estudanteRequest) {
 		
 		EstudanteDto estudante = EstudanteMapper.requestToDto(estudanteRequest);
 		EstudanteDto estudanteDto2 = estudanteService.create(estudante);

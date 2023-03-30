@@ -18,6 +18,18 @@ public class EstudanteService {
 	}
 
 	public EstudanteDto create(EstudanteDto estudanteDto2) {
+		
+		if(repository.existByCpf(estudanteDto2.getCpf())) {
+			throw new RuntimeException("CPF já existe para outro estudante");
+		}
+		if(repository.existByEmail(estudanteDto2.getEmail())) {
+			throw new RuntimeException("Email já existe para outro estudante");
+		}
+		
+		//if(repository.existByCpfOrEmail(estudanteDto.getCpf(), estudante.getEmail())) {
+		//	throw new RuntimeException("Email já existe para outro estudante");
+		//}
+		
 		estudanteDto2.setNome(estudanteDto2.getNome().toUpperCase());
 		estudanteDto2.setEmail(estudanteDto2.getEmail().toLowerCase());
 		estudanteDto2.setSenha( MD5.encode(estudanteDto2.getSenha()));
