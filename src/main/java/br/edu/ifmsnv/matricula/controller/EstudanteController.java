@@ -4,7 +4,9 @@ import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,9 +39,13 @@ public class EstudanteController {
 		return ResponseEntity.ok("Olá Mundo");
 	}
 
+	//fazendo a criação
 	@Operation(summary = "Novo recurso", description = "Serviço para cadastrar um recurso")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Operação de sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EstudanteResponse.class))),
+			@ApiResponse(responseCode = "200", description = "Operação de sucesso", 
+				content = @Content(mediaType = "application/json", 
+				
+				schema = @Schema(implementation = EstudanteResponse.class))),
 			@ApiResponse(responseCode = "500", description = "Falha no serviço", content = @Content) })
 	@PostMapping
 	public ResponseEntity<EstudanteResponse> create(@RequestBody @Valid EstudanteRequest estudanteRequest) {
@@ -50,5 +56,30 @@ public class EstudanteController {
 		EstudanteResponse estudanteResponse =EstudanteMapper.dtoToResponse(estudanteDto2);
 		return ResponseEntity.ok(estudanteResponse);
 	}
-
+	
+	@Operation(summary = "Atualizar recurso", description = "Seriço para atualizar um recurso")
+	
+	@ApiResponse(value = {
+			@ApiResponse(responseCode = "200", description = "Operação de sucesso", 
+			content = @Content(mediaType = "application/json", schema=@Schema(implementation = EstudateResponse.class))),
+			@ApiResponse(responseCode = "400", description = "Solicitaão incorreta", 
+			content = @Content(mediaType = "application/json", schema=@Schema(implementation = ErrorResponse.class))),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado",
+			content = @Content(mediaType = "application/json", schema=@Schema(implementation = ErrorResponse.class)));
+					@ApiResponse(responseCode = "500", description = "Falha no serviço", 
+					content = @Content)
+	});
+	
+	
+@PutMapping("/{id}")
+	public ResponseEntity<EstudanteResponse> update(PathVariable UUID id, @RequesBody @Valid EstudanteRequest estudanteRequest){
+		EstudanteDto estudanteDto = EstudanteMapperToDto(estudanteRequest);
+		EstudanteDto2 estudanteDto = estudante.update(id, EstudanteDto),
+		EstudanteResponse estudanteReponse = EstudanteMapperToresponse(estudanteDto2);
+		
+		return ResponseEntity.ok(estudanteResponse)
+		};
+		
+		
+	
 }

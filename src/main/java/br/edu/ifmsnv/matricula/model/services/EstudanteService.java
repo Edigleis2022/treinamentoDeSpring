@@ -1,5 +1,8 @@
 package br.edu.ifmsnv.matricula.model.services;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import br.edu.ifmsnv.matricula.model.dto.EstudanteDto;
@@ -7,6 +10,7 @@ import br.edu.ifmsnv.matricula.model.entities.Estudante;
 import br.edu.ifmsnv.matricula.model.mapper.EstudanteMapper;
 import br.edu.ifmsnv.matricula.model.repositories.EstudanteRepository;
 import br.edu.ifmsnv.treinamentoDeString.config.utils.MD5;
+import jakarta.transaction.Transactional;
 
 @Service
 public class EstudanteService {
@@ -40,6 +44,21 @@ public class EstudanteService {
 		return EstudanteMapper.entityToDto(estudante);
 	}
 	
+	public Optional<Estudante> findByid(UUID id){
+		Optional<Estudante> estudanteOptional = repository.findById(id);
+		return estudanteOptional.map( estudante -> EstudanteMapper.entityToDto(estudante));
+	}
 	
+	@Transactional
+	public EstudanteDto update(UUID id, EstudanteDto estudanteInput) {
+		Optional<Estudante> estudanteOptional = repository.findById(id);
+		Estudante estudante = estudanteOptional.orElseThrow(() -> new EntityNotFoundException(message: "Estudante não encontrado"));
 	
+	estudante.setNome( estudanteInput.getNome().toUpperCase() );
+	estudante.setCpf( estudanteInput.getCpf() );
+	estudante.setEmail( estudanteInput.getEmail() );
+	repository.save(estudante);
+	
+	return EstudanteMapper.entityToDto(estudante);
+	}
 }
